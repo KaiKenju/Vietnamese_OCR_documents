@@ -7,10 +7,26 @@ import os
 import numpy as np
 from PIL import Image
 import matplotlib.pyplot as plt
-from image_processing import is_image_sharp, sharpen_image, preprocess_image, detect_table_edges, detect_table_corners, calculate_rotation_angle, process_and_save
+from image_processing import is_image_sharp, sharpen_image, preprocess_image, detect_table_edges, detect_table_corners, calculate_rotation_angle, process_and_save, convert_pdf_to_docx
 
+from reportlab.pdfgen import canvas
+from reportlab.pdfbase.ttfonts import TTFont
+from reportlab.pdfbase import pdfmetrics
+import time
 # Initialize PaddleOCR
-ocr = PaddleOCR(lang='en')
+# ocr = PaddleOCR(lang='en')
+start_time_total = time.time()
+ocr = None
+def initialize_ocr():
+    global ocr
+    if ocr is None:
+        ocr = PaddleOCR(lang='en', use_gpu=False)
+
+# Gọi hàm này khi cần sử dụng OCR
+start_time_initialize_ocr = time.time()
+initialize_ocr()
+end_time_initialize_ocr = time.time()
+execution_time_initialize_ocr = end_time_initialize_ocr - start_time_initialize_ocr
 
 # Specifying output path and font path.
 out_path = './output'
@@ -18,19 +34,21 @@ font = './simfang.ttf'
 
 # Initialize VietOCR
 # use vgg_seq2seq
-# config = Cfg.load_config_from_name('vgg_vgg_seq2seq.pth')
+# config = Cfg.load_config_from_name('vgg_seq2seq.pth') # load internet
 # config['weights'] = 'https://vocr.vn/data/vietocr/vgg_seq2seq.pth'
 # # config['pretrain'] = 'https://vocr.vn/data/vietocr/vgg_seq2seq.pth'
 # config['cnn']['pretrained']=False
 config = Cfg.load_config_from_name('vgg_transformer')
-config['weights'] = 'https://vocr.vn/data/vietocr/vgg_transformer.pth'
+config['weights'] = './weight/vgg_transformer.pth' #use weihgt local
+# config['weights'] = 'https://vocr.vn/data/vietocr/vgg_transformer.pth'
 config['cnn']['pretrained'] = False
 config['device'] = 'cpu' #comment this line if you want to use GPU
 
 detector = Predictor(config)
 
+start_time_processing = time.time()
 # image path
-img_path = './assets/rotation_thuvien.png'
+img_path = './assets/don-khoi-kien-vu-an-hanh-chinh-9418.png'
 
 img_ori = cv2.imread(img_path)
 
@@ -78,6 +96,11 @@ plt.figure(figsize=(6, 5))
 plt.imshow(cv2.cvtColor(edges_on_white, cv2.COLOR_BGR2RGB))
 plt.title('OCR Final')
 
+end_time_processing = time.time()
+execution_time_processing = end_time_processing - start_time_processing
+c = canvas.Canvas("ocr_final.pdf", pagesize=(img.shape[1], img.shape[0]))
+pdfmetrics.registerFont(TTFont('Arial', 'Arial.ttf'))
+image_height = img.shape[0]
 
 #add text & bbox in image
 for text, box in zip(texts, boxes):
@@ -87,15 +110,25 @@ for text, box in zip(texts, boxes):
     x2 += 5  # shift right 5 pixel
     y1 += 10  # shift down 10 pixel 
     y2 += 10
+    
     plt.text(x1, y1, text, ha='left', va='top', wrap=True, linespacing=0.75, fontdict={'family': 'serif', 'size': 7})
 
+    y1, y2 = image_height - y1, image_height - y2
+    c.setFont("Arial", 10)
+    c.drawString(x1, y1, text)
+c.save()
 plt.axis('off')
 plt.tight_layout()
 plt.savefig('ocr_final_image_with_boxes.jpg', bbox_inches='tight', pad_inches=0,dpi=300)
 
-#Post-processing, analysis 
-texts_1 = texts
-# Specify the folder where you want to save the cropped images
+# Gọi hàm chuyển đổi
+pdf_file = 'ocr_final.pdf'
+docx_file = 'ocr_final_word.docx'
+convert_pdf_to_docx(pdf_file, docx_file)
+
+ #Post-processing, analysis 
+# # texts_1 = texts[::-1]
+# # Specify the folder where you want to save the cropped images
 save_folder = 'cropped_images'
 
 # Ensure the folder exists
@@ -108,9 +141,9 @@ for box in reversed(boxes):
     process_and_save(cropped_image, save_folder, count)
     count += 1
 
-output = ""
-for text in reversed(texts):
-    output += text + " "
-
-print(output)
+end_time_total = time.time()
+execution_time_total = end_time_total - start_time_total
+print("Thời gian khởi tạo OCR:", execution_time_initialize_ocr, "giây")
+print("Thời gian xử lý ảnh và dự đoán:", execution_time_processing, "giây")
+print("Tổng thời gian thực thi:", execution_time_total, "giây")
 plt.show()

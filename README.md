@@ -2,16 +2,16 @@
 
 ## Cài Đặt
 
-- Clone project với lệnh:
+- Clone  this project:
 
 ```[bash]
 git clone https://github.com/KaiKenju/Vietnamese_OCR_documents
 ```
 
-- Khởi tạo môi trường với Miniconda:
+- Initial enviromment with Miniconda:
 
 ```[bash]
-conda create -n <tên environment tự đặt> python=3.8
+conda create -n <env_name> python=3.8
 ```
 
 Chạy lần lượt các lệnh:

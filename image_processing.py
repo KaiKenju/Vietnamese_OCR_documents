@@ -1,6 +1,7 @@
 import os
 import cv2
 import numpy as np
+from pdf2docx import Converter
 
 def is_image_sharp(image):
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -101,3 +102,12 @@ def process_and_save(image, save_folder, count):
     
     # Save the cropped image to the specified folder
     cv2.imwrite(os.path.join(save_folder, f'cropped_image_{count}.jpg'), image)
+
+def convert_pdf_to_docx(pdf_file, docx_file):
+    cv = Converter(pdf_file)
+    
+    # Chuyển đổi PDF thành DOCX
+    cv.convert(docx_file, start=0, end=None)
+    
+    # Đóng Converter
+    cv.close()
