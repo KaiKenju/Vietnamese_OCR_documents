@@ -30,7 +30,7 @@ python main.py
 ## Kết quả
 <table>
   <tr>
-    <td><img src="assets/nhohon90.png" alt="nhohon90"></td>
+    <td><img src="assets/assets/don-khoi-kien-vu-an-hanh-chinh-9418.png" alt="don-khoi-kien-vu-an-hanh-chinh-9418"></td>
     <td><img src="ocr_final_image_with_boxes.jpg" alt="ocr_final_image_with_boxes"></td>
   </tr>
 </table>
