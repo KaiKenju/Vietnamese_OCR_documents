@@ -28,4 +28,9 @@ pip install -e .
 python main.py
 ```
 ## Kết quả
-![alt text](assets/nhohon90.png)![alt text](ocr_final_image_with_boxes.jpg)
+<table>
+  <tr>
+    <td><img src="assets/nhohon90.png" alt="nhohon90"></td>
+    <td><img src="ocr_final_image_with_boxes.jpg" alt="ocr_final_image_with_boxes"></td>
+  </tr>
+</table>
