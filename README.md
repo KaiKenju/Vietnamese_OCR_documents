@@ -30,7 +30,8 @@ python main.py
 ## Kết quả
 <table>
   <tr>
-    <td><img src="assets/don-khoi-kien-vu-an-hanh-chinh-9418.png" alt="don-khoi-kien-vu-an-hanh-chinh-9418"></td>
-    <td><img src="ocr_final_image_with_boxes.jpg" alt="ocr_final_image_with_boxes"></td>
+    <td><img src="assets/don-khoi-kien-vu-an-hanh-chinh-9418.png" alt="don-khoi-kien-vu-an-hanh-chinh-9418" style="width: 50%;"></td>
+    <td><img src="ocr_final_image_with_boxes.jpg" alt="ocr_final_image_with_boxes" style="width: 50%;"></td>
   </tr>
 </table>
+
