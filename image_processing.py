@@ -7,8 +7,10 @@ def is_image_sharp(image):
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     laplacian = cv2.Laplacian(gray, cv2.CV_64F)
     variance = laplacian.var()
-    return variance > 5000  # Ngưỡng có thể điều chỉnh tùy theo yêu cầu 6000
-
+    return variance > 500  # Ngưỡng có thể điều chỉnh tùy theo yêu cầu 6000
+def blur_image(img):
+    blurred_image = cv2.GaussianBlur(img, (3, 3), 0)  # Sử dụng kernel 5x5 cho bộ lọc Gaussian
+    return blurred_image
 
 def sharpen_image(img):
     sharpen_kernel = np.array([[-1, -1, -1],
@@ -21,9 +23,9 @@ def preprocess_image(img):
     if not is_image_sharp(img):
         print("Ảnh mờ, đang làm sắc nét...")
         img = sharpen_image(img)
+        print("Đang làm mờ ảnh để dễ nhìn hơn...")
+        img = blur_image(img)
     return img
-
-# phát hiện cạnh/bảng của văn bản và mask văn bản
 
 
 def detect_table_edges(img):
@@ -48,66 +50,76 @@ def detect_table_edges(img):
     masked_img = cv2.bitwise_and(img, img, mask=mask)
     return masked_img, edges_on_white
 
-# Tính góc xoay cần điều chỉnh để làm thẳng ảnh
 def calculate_rotation_angle(corners):
-    if len(corners) < 2:
+    if len(corners) < 1:
+        return 0  # Nếu không đủ điểm góc, không xoay ảnh
+    angles = []
+    for i in range(0, len(corners), 2):
+        x1, y1 = corners[i]
+        x2, y2 = corners[i + 1]
+        angle = np.arctan2(y2 - y1, x2 - x1)
+        degrees = np.degrees(angle)
+        if abs(degrees) > 10:  # Chỉ tính các góc lớn hơn 10 độ
+            angles.append(degrees)
+    if not angles:
         return 0
-    x1, y1 = corners[0]
-    x2, y2 = corners[1]
-    angle = np.arctan2(y2 - y1, x2 - x1)
-    degrees = np.degrees(angle)
-    if -80 > degrees > -90:
-        # Nếu góc nhỏ hơn -90 độ, xoay về phía bên phải để làm thẳng đứng
-        print("Góc xoay khi xoay:", degrees)
-        degrees = 90+ degrees
-       
-    elif degrees > 80:
-        # Nếu góc lớn hơn 90 độ, xoay về phía bên trái để làm thẳng đứng
-        print("Góc xoay khi xoay:", degrees)
-        degrees = degrees - 90
-        
-    
-    return degrees
+    average_angle = sum(angles) / len(angles)
+    if abs(average_angle) > 45:
+        average_angle = (90 + average_angle) if average_angle < 0 else (average_angle - 90)
+    else: 
+        average_angle = 0 
+    return average_angle
 
-# phát hiện góc của bảng để xoay
 def detect_table_corners(img):
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    edges = cv2.Canny(gray, 50, 170, apertureSize=3)
-    lines = cv2.HoughLinesP(edges, 1, np.pi/180,
-                            threshold=100, minLineLength=100, maxLineGap=10)
-
+    edges = cv2.Canny(gray, 50, 150)
+    lines = cv2.HoughLinesP(edges, 1, np.pi / 180, 50, minLineLength=100, maxLineGap=10)
     corners = []
     if lines is not None:
         for line in lines:
             x1, y1, x2, y2 = line[0]
+            corners.extend([(x1, y1), (x2, y2)])
+    return corners, calculate_rotation_angle(corners)
 
-            angle = np.arctan2(y2 - y1, x2 - x1)
-            angle_deg = np.degrees(angle)
+def rotate_image(img, angle):
+    if angle == 0:
+        return img
+    center = (img.shape[1] // 2, img.shape[0] // 2)
+    rotation_matrix = cv2.getRotationMatrix2D(center, angle, 1.0)
+    return cv2.warpAffine(img, rotation_matrix, (img.shape[1], img.shape[0]))
 
-            if abs(angle_deg) > 45:  # Vertical line
-                corners.append((x1, y1))
-                corners.append((x2, y2))
-            else:  # Horizontal line
-                corners.append((x1, y1))
-                corners.append((x2, y2))
+def deskew(img):
+    # Chuyển ảnh sang không gian màu xám
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    
+    # Phát hiện cạnh trong ảnh
+    edges = cv2.Canny(gray, 50, 200)
 
-    rotation_angle = calculate_rotation_angle(
-        corners)  # Calculate rotation angle here
+    # Sử dụng phép biến đổi Hough để tìm đường thẳng
+    lines = cv2.HoughLinesP(edges, 1, np.pi/180, 100, minLineLength=100, maxLineGap=10)
 
-    return corners, rotation_angle
+    # Tính toán góc nghiêng của ảnh
+    angles = []
+    for line in lines:
+        x1, y1, x2, y2 = line[0]
+        angle = np.arctan2(y2 - y1, x2 - x1) * 180 / np.pi
+        angles.append(angle)
+    
+    median_angle = np.median(angles)
+    
+    # Xoay ảnh ngược lại với góc nghiêng đã tính được
+    rows, cols = img.shape[:2]
+    M = cv2.getRotationMatrix2D((cols / 2, rows / 2), median_angle, 1)
+    img_rotated = cv2.warpAffine(img, M, (cols, rows), borderMode=cv2.BORDER_REPLICATE)
+    print(f"Ảnh đã được xoay {median_angle:.2f} độ để thẳng đứng.")
+
+    return img_rotated
 
 def process_and_save(image, save_folder, count):
-    # Create the save folder if it doesn't exist
     os.makedirs(save_folder, exist_ok=True)
-    
-    # Save the cropped image to the specified folder
     cv2.imwrite(os.path.join(save_folder, f'cropped_image_{count}.jpg'), image)
 
 def convert_pdf_to_docx(pdf_file, docx_file):
     cv = Converter(pdf_file)
-    
-    # Chuyển đổi PDF thành DOCX
     cv.convert(docx_file, start=0, end=None)
-    
-    # Đóng Converter
     cv.close()

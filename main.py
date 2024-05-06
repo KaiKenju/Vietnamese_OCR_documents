@@ -48,10 +48,11 @@ detector = Predictor(config)
 
 start_time_processing = time.time()
 # image path
-img_path = './assets/don-khoi-kien-vu-an-hanh-chinh-9418.png'
+img_path = './assets/covid.png'
 
 img_ori = cv2.imread(img_path)
 
+#làm nét ảnh nếu cần
 img = preprocess_image(img_ori)
 
 corners, rotation_angle  = detect_table_corners(img)
@@ -61,6 +62,7 @@ if rotation_angle != 0:
     center = (img.shape[1] // 2, img.shape[0] // 2)
     rotation_matrix = cv2.getRotationMatrix2D(center, rotation_angle, 1.0)
     img = cv2.warpAffine(img, rotation_matrix, (img.shape[1], img.shape[0]))
+
 
 # Thực hiện phát hiện vùng quan tâm bằng PaddleOCR
 detection_result = ocr.ocr(img, cls=False, det=True, rec=False)
@@ -99,7 +101,7 @@ plt.title('OCR Final')
 end_time_processing = time.time()
 execution_time_processing = end_time_processing - start_time_processing
 c = canvas.Canvas("ocr_final.pdf", pagesize=(img.shape[1], img.shape[0]))
-pdfmetrics.registerFont(TTFont('Arial', 'Arial.ttf'))
+pdfmetrics.registerFont(TTFont('Times New Roman', 'times.ttf'))
 image_height = img.shape[0]
 
 #add text & bbox in image
@@ -114,7 +116,7 @@ for text, box in zip(texts, boxes):
     plt.text(x1, y1, text, ha='left', va='top', wrap=True, linespacing=0.75, fontdict={'family': 'serif', 'size': 7})
 
     y1, y2 = image_height - y1, image_height - y2
-    c.setFont("Arial", 10)
+    c.setFont("Times New Roman", 10)
     c.drawString(x1, y1, text)
 c.save()
 plt.axis('off')

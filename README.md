@@ -13,6 +13,11 @@ git clone https://github.com/KaiKenju/Vietnamese_OCR_documents
 ```[bash]
 conda create -n <env_name> python=3.8
 ```
+- Activate conda
+```[bash]
+conda activate <env_name> 
+cd Vietnamese_OCR_documents
+```
 
 Chạy lần lượt các lệnh:
 
@@ -23,9 +28,13 @@ pip install -e .
 ```
 
 ## Khởi chạy
-
+* if you want to understand how the system works, please run:
 ```[bash]
 python main.py
+```
+* else, best performance:
+```[bash]
+python performance_thread.py
 ```
 ## Kết quả
 <table>
