@@ -46,20 +46,20 @@ python performance_thread.py
 ## Structure Project
 ```[bash]
 Vietnamese_OCR_Documents/
-├── assets/  # contains image to OCR
-├── config/  #  configuration files and options for OCR system
-├── cropped_images/  # Images are cropped for recognition purposes
-├── folder_file_api/  # file pdf,word after OCR for web-app using Fast-api
-├── weight/  # The weight  of system
-├── PaddleOCR/  # Paddle repositories
-├── static/  # front-end 
-├── app.py/  demo web(local-host) using FastAPI 
-├── Core_OCR.ipynb/  # notebook paddleOCR + vietOCR
-├── image_processing.py/  # image processing
+├── assets/              # contains image to OCR
+├── config/              #  configuration files and options for OCR system
+├── cropped_images/      # Images are cropped for recognition purposes
+├── folder_file_api/     # file pdf,word after OCR for web-app using Fast-api
+├── weight/              # The weight  of system
+├── PaddleOCR/           # Paddle repositories
+├── static/              # front-end 
+├── app.py/              # demo web(local-host) using FastAPI 
+├── Core_OCR.ipynb/      # notebook paddleOCR + vietOCR
+├── image_processing.py/ # image processing
 ├── main.py 
 ├── performance_thread/  # performance optimization (faster main.py using thread)
 ├── Pretrained_vietOCR/  # training VietOCR
-├── requirements.txt  # lib,..
-├── README.md  #  english version
-├── README_vn.md  #  vietnamese version
+├── requirements.txt     
+├── README.md            # english version
+├── README_vn.md         # vietnamese version
 ```

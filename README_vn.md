@@ -48,20 +48,20 @@ python performance_thread.py
 ## Cấu trúc của project
 ```[bash]
 Vietnamese_OCR_Documents/
-├── assets/  # 	chứa ảnh để OCR
-├── config/  #  lựa chọn config cho hệ thống OCR 
-├── cropped_images/  # ảnh được cắt để nhận dạng tiếng việt
-├── folder_file_api/  # file pdf ,word sinh ra từ OCR
-├── weight/  # trọng số 
-├── PaddleOCR/  # Paddle repositories
-├── static/  # front-end 
-├── app.py/  demo web(local-host) using FastAPI 
-├── Core_OCR.ipynb/  # notebook paddleOCR + vietOCR
+├── assets/               # chứa ảnh để OCR
+├── config/               # lựa chọn config cho hệ thống OCR 
+├── cropped_images/       # ảnh được cắt để nhận dạng tiếng việt
+├── folder_file_api/      # file pdf ,word sinh ra từ OCR
+├── weight/               # trọng số 
+├── PaddleOCR/            # Paddle repositories
+├── static/               # front-end 
+├── app.py/               # demo web(local-host) using FastAPI 
+├── Core_OCR.ipynb/       # notebook paddleOCR + vietOCR
 ├── image_processing.py/  # tiền xử lý ảnh 
 ├── main.py 
-├── performance_thread/  # xử lý OCR nhanh hơn (dùng thread) main.py 
-├── Pretrained_vietOCR/  # đào tạo bộ dữ liệu VietOCR
-├── requirements.txt  # lib,..
-├── README.md  #  phiên bản tiếng anh
-├── README_vn.md  #  phiên bản tiếng việt
+├── performance_thread/   # xử lý OCR nhanh hơn (dùng thread) main.py 
+├── Pretrained_vietOCR/   # đào tạo bộ dữ liệu VietOCR
+├── requirements.txt      # lib,..
+├── README.md             # phiên bản tiếng anh
+├── README_vn.md          # phiên bản tiếng việt
 ```
