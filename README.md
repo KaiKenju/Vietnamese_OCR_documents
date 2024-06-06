@@ -18,12 +18,10 @@ conda create -n <env_name> python=3.8
 conda activate <env_name> 
 cd Vietnamese_OCR_documents
 ```
-Run the commands:
+- Run the commands:
 ```[bash]
 pip install -r requirements.txt
 pip install reportlab
-<!-- cd PaddleOCR
-pip install -e . -->
 ```
 
 ## ▶️ Run

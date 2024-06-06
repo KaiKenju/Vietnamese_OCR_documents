@@ -19,13 +19,11 @@ conda activate <env_name>
 cd Vietnamese_OCR_documents
 ```
 
-Chạy lần lượt các lệnh:
+- Chạy lần lượt các lệnh:
 
 ```[bash]
 pip install -r requirements.txt
 pip install reportlab
-<!-- cd PaddleOCR
-pip install -e . -->
 ```
 
 ## ▶️ Khởi chạy
