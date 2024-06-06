@@ -46,6 +46,7 @@ python performance_thread.py
 </table>
 
 ## Cấu trúc của project
+```[bash]
 Vietnamese_OCR_Documents/
 ├── assets/  # 	chứa ảnh để OCR
 ├── config/  #  lựa chọn config cho hệ thống OCR 
@@ -63,3 +64,4 @@ Vietnamese_OCR_Documents/
 ├── requirements.txt  # lib,..
 ├── README.md  #  phiên bản tiếng anh
 ├── README_vn.md  #  phiên bản tiếng việt
+```

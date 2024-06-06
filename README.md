@@ -44,6 +44,7 @@ python performance_thread.py
 </table>
 
 ## Structure Project
+```[bash]
 Vietnamese_OCR_Documents/
 ├── assets/  # contains image to OCR
 ├── config/  #  configuration files and options for OCR system
@@ -61,4 +62,4 @@ Vietnamese_OCR_Documents/
 ├── requirements.txt  # lib,..
 ├── README.md  #  english version
 ├── README_vn.md  #  vietnamese version
-
+```
