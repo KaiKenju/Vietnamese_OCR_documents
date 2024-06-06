@@ -189,7 +189,7 @@ def process_image(img):
     contours, hierarchy = cv2.findContours(edged.copy(), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     contours = sorted(contours, key=cv2.contourArea, reverse=True)[:300]
     biggest, max_area = biggest_contour(contours)
-
+    
     if len(biggest) >= 4:  # Nếu có đủ 4 góc
         cv2.drawContours(img, [biggest], -1, (0, 255, 0), 3)
 
@@ -219,6 +219,8 @@ def process_image(img):
 
         # Hiển thị hình ảnh đầu ra
         cv2.imshow("Warped Perspective", img_output)
+        cv2.imwrite('assets/after_perspective.png', img_output)
+    
 
     else:  # Nếu không đủ 4 góc
         # Tạo hình chữ nhật gần đúng nhất từ các điểm có sẵn
@@ -243,5 +245,5 @@ def process_image(img):
     cv2.destroyAllWindows()
 
 if __name__ == "__main__":
-    img = cv2.imread('assets/image_test_perspective.jpg')
+    img = cv2.imread('assets/perspective_done.png')
     process_image(img)

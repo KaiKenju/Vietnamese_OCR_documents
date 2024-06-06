@@ -3,16 +3,51 @@ import cv2
 import numpy as np
 from pdf2docx import Converter
 
+def brightness(image):
+    # Chuyển đổi hình ảnh sang không gian màu YUV
+    yuv_image = cv2.cvtColor(image, cv2.COLOR_BGR2YUV)
+
+    # Trích xuất kênh Y (Luminance) từ không gian màu YUV
+    luminance = yuv_image[:,:,0]
+
+    # Tính toán giá trị trung bình của kênh Y
+    mean_brightness = luminance.mean()
+
+    return mean_brightness
+
+def enhance_brightness(image, target_brightness, increase_factor=1.2):
+    current_brightness = brightness(image)
+    if current_brightness < target_brightness:
+        # Tăng cường độ sáng bằng cách nhân với hệ số tăng
+        adjusted_image = cv2.convertScaleAbs(image, alpha=increase_factor, beta=0)
+        print("đã tăng cường độ sáng...")
+        return adjusted_image
+    else:
+        return image
 def is_image_sharp(image):
+    '''
+    - Checks if the image is sharp by calculating the variance of Laplacian.
+    - Converts the image to grayscale, applies Laplacian filter,
+    and calculates the variance. Returns True if variance is greater than 500,
+    indicating sharpness. Threshold can be adjusted as needed.
+    '''
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     laplacian = cv2.Laplacian(gray, cv2.CV_64F)
     variance = laplacian.var()
-    return variance > 500  # Ngưỡng có thể điều chỉnh tùy theo yêu cầu 6000
+    return variance > 100  # Ngưỡng có thể điều chỉnh tùy theo yêu cầu 6000
 def blur_image(img):
+    '''
+    - Blurs the input image using Gaussian blur.
+    - Utilizes a 3x3 kernel for Gaussian blur.
+    '''
     blurred_image = cv2.GaussianBlur(img, (3, 3), 0)  # Sử dụng kernel 5x5 cho bộ lọc Gaussian
     return blurred_image
 
 def sharpen_image(img):
+    '''
+    - Sharpens the input image using a specific sharpening kernel.
+    - Applies a 3x3 sharpening kernel which enhances edges.
+    '''
     sharpen_kernel = np.array([[-1, -1, -1],
                                [-1, 9, -1],
                                [-1, -1, -1]])
@@ -20,6 +55,9 @@ def sharpen_image(img):
 
 
 def preprocess_image(img):
+    '''
+    Combination 2 function above
+    '''
     if not is_image_sharp(img):
         print("Ảnh mờ, đang làm sắc nét...")
         img = sharpen_image(img)
@@ -29,6 +67,11 @@ def preprocess_image(img):
 
 
 def detect_table_edges(img):
+    '''
+    - Detects edges of tables in the input image using morphological operations.
+    - Converts the image to grayscale, applies morphological transformations to detect horizontal and vertical lines,
+    combines the results, and creates a mask. Returns the masked image with detected table edges.
+    '''
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     _, thresh = cv2.threshold(gray, 170, 255, cv2.THRESH_BINARY_INV)
     kernel = np.ones((3, 3), np.uint8)
@@ -89,16 +132,16 @@ def rotate_image(img, angle):
     return cv2.warpAffine(img, rotation_matrix, (img.shape[1], img.shape[0]))
 
 def deskew(img):
-    # Chuyển ảnh sang không gian màu xám
+    '''
+    - Deskews the input image to straighten any skewed text or objects.
+    - Converts the image to grayscale, detects edges using Canny edge detector,
+    performs Hough transform to detect lines, calculates the median angle from the detected lines,
+    and rotates the image to align it with the median angle.
+    - Returns the deskewed image.
+    '''
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    
-    # Phát hiện cạnh trong ảnh
     edges = cv2.Canny(gray, 50, 200)
-
-    # Sử dụng phép biến đổi Hough để tìm đường thẳng
     lines = cv2.HoughLinesP(edges, 1, np.pi/180, 100, minLineLength=100, maxLineGap=10)
-
-    # Tính toán góc nghiêng của ảnh
     angles = []
     for line in lines:
         x1, y1, x2, y2 = line[0]
@@ -107,7 +150,7 @@ def deskew(img):
     
     median_angle = np.median(angles)
     
-    # Xoay ảnh ngược lại với góc nghiêng đã tính được
+
     rows, cols = img.shape[:2]
     M = cv2.getRotationMatrix2D((cols / 2, rows / 2), median_angle, 1)
     img_rotated = cv2.warpAffine(img, M, (cols, rows), borderMode=cv2.BORDER_REPLICATE)
@@ -116,10 +159,19 @@ def deskew(img):
     return img_rotated
 
 def process_and_save(image, save_folder, count):
+    '''
+    - Processes the image and saves it to the specified folder with a given count.
+    - Creates the save folder if it doesn't exist, then saves the processed image with a unique filename.
+    '''
     os.makedirs(save_folder, exist_ok=True)
     cv2.imwrite(os.path.join(save_folder, f'cropped_image_{count}.jpg'), image)
 
 def convert_pdf_to_docx(pdf_file, docx_file):
+    '''
+    - Converts a PDF file to a DOCX file using the `pdf2docx` library.
+    - Initializes a converter, converts the PDF file to DOCX, and closes the converter.
+    '''
     cv = Converter(pdf_file)
     cv.convert(docx_file, start=0, end=None)
     cv.close()
+

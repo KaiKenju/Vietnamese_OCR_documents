@@ -1,0 +1,104 @@
+<html>
+<style>
+body {
+   font-family: Arial, sans-serif;
+   margin: 0;
+   padding: 0;
+   color: #fff;
+}
+
+.header {
+   position: fixed;
+   top: 0;
+   left: 0;
+   width: 100%;
+   background: rgba(0, 0, 0, 0.5);
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+   padding: 10px;
+}
+
+.header a {
+   color: #fff;
+   text-decoration: none;
+   margin-right: 10px;
+}
+
+.header button {
+   background: #fff;
+   color: #000;
+   border: none;
+   padding: 10px;
+   border-radius: 5px;
+   cursor: pointer;
+}
+
+.video-container {
+   position: fixed;
+   top: 0;
+   left: 0;
+   width: 100%;
+   height: 100%;
+   object-fit: cover;
+}
+
+.content {
+   margin-top: 50px;
+   padding: 20px;
+}
+
+.product-container {
+   display: flex;
+   flex-wrap: wrap;
+   justify-content: space-between;
+}
+
+.product {
+   width: calc(33.33% - 20px);
+   margin-bottom: 20px;
+}
+
+.product img {
+   width: 100%;
+   height: auto;
+}
+</style>
+<body>
+   <div class="header">
+       <a href="#" class="logo">N</a>
+       <a href="#" class="logo">C</a>
+       <a href="#" class="logo">S</a>
+       <input type="text" placeholder="Search...">
+       <div class="social-icons">
+           <a href="#" class="icon">🔎</a>
+           <a href="#" class="icon">🔊</a>
+           <a href="#" class="icon">🔍</a>
+       </div>
+       <button>Buy Now</button>
+   </div>
+   <div class="video-container">
+       <video autoplay muted loop>
+           <source src="video.mp4" type="video/mp4">
+       </video>
+   </div>
+   <div class="content">
+       <h1>Welcome to NCS</h1>
+       <p>Experience the future of fashion with us. Shop our latest collections now.</p>
+       <div class="product-container">
+           <div class="product">
+               <img src="https://source.unsplash.com/random" alt="Product 1">
+               <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+           </div>
+           <div class="product">
+               <img src="https://source.unsplash.com/random" alt="Product 2">
+               <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+           </div>
+           <div class="product">
+               <img src="https://source.unsplash.com/random" alt="Product 3">
+               <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+           </div>
+       </div>
+   </div>
+</body>
+</html>

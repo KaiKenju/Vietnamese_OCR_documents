@@ -23,8 +23,9 @@ Chạy lần lượt các lệnh:
 
 ```[bash]
 pip install -r requirements.txt
-cd PaddleOCR
-pip install -e .
+pip install reportlab
+<!-- cd PaddleOCR
+pip install -e . -->
 ```
 
 ## Khởi chạy

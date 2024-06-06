@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OCR Vietnamese </title>
+    <link rel="icon" type="image/png" href="/static/download.png">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            position: relative;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            font-size: 24px;
+            color: #333;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        input[type="file"] {
+            margin-bottom: 20px;
+        }
+
+        input[type="submit"], button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 10px;
+        }
+
+        input[type="submit"]:hover, button:hover {
+            background-color: #45a049;
+        }
+
+        .footer {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #777;
+        }
+
+        .results {
+            margin-top: 20px;
+            text-align: left;
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-start;
+        }
+
+        .results img {
+            max-width: 600px;
+        }
+
+        .spinner {
+            display: none;
+            position: absolute;
+            top: 30%; /* Đặt spinner ở phía trên cùng giữa màn hình */
+            left: 40%; /* Đặt spinner ở phía bên trái giữa màn hình */
+            transform: translate(-50%, -50%); /* Dịch chuyển spinner điều chỉnh để căn giữa */
+            border: 8px solid #f3f3f3;
+            border-top: 8px solid #3498db;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite;
+            align-items: center;
+        }
+        
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            display: none;
+        }
+
+        .loading-overlay {
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="overlay" id="overlay"></div>
+        <div class="spinner" id="spinner"></div>
+        <h1>Upload Image</h1>
+        <form id="uploadForm">
+            <input type="file" name="image" id="imageInput" accept="image/*">
+            <button type="button" onclick="uploadImage()">Submit</button>
+            <div id="buttondownload" style="display: none;">
+                <button onclick="downloadFileFromBackend()">Tải xuống Tệp</button>
+            </div>
+            
+            <!-- <button onclick="downloadFileFromBackend()">Tải xuống Tệp</button> -->
+
+        </form>
+
+        <div class="results" id="results">
+            <img id="originalImage" src="#" alt="Original Image" style="display: none;">
+            <div id="recognizedText" style="text-align: left;"></div>
+        </div>
+        
+        <div class="footer">
+            <p>&copy; 2024 Your Company. All rights reserved.</p>
+        </div>
+    </div>
+
+    <script>
+        async function uploadImage() {
+            const imageInput = document.getElementById('imageInput');
+            const resultsDiv = document.getElementById('results');
+            const spinner = document.getElementById('spinner');
+            const overlay = document.getElementById('overlay');
+            
+            if (imageInput.files.length === 0) {
+                alert('Vui lòng chọn một hình ảnh để tải lên');
+                return;
+            }
+        
+            const formData = new FormData();
+            formData.append('image', imageInput.files[0]);
+        
+            // Hiển thị spinner và overlay
+            spinner.style.display = 'block';
+            overlay.style.display = 'block';
+        
+            try {
+                const response = await fetch('/process_image/', {
+                    method: 'POST',
+                    body: formData
+                });
+        
+                if (!response.ok) {
+                    throw new Error('Phản hồi từ máy chủ không hợp lệ: ' + response.statusText);
+                }
+        
+                const data = await response.json();
+
+                // Hiển thị ảnh gốc
+                const originalImage = document.getElementById('originalImage');
+                originalImage.src = URL.createObjectURL(imageInput.files[0]);
+                originalImage.style.display = 'block';
+
+                // Hiển thị phần nhận dạng 
+                const recognizedTextDiv = document.getElementById('recognizedText');
+                // <p>Thời gian xử lý: ${data.processing_time} giây</p>
+                // <p>Thời gian nhận dạng: ${data.recognition_time} giây</p>
+                // <p>Tổng thời gian: ${data.total_time} giây</p>
+                recognizedTextDiv.innerHTML = `
+                    
+                    <h3>\tVăn bản nhận dạng:</h3>
+                    <div style="margin-left: 20px;">
+                        ${data.texts.reverse().map(text => `<span style="display: block;">${text.charAt(0).toUpperCase() === text.charAt(0) ? text : '- ' + text}</span>`).join('')}
+                    </div>
+                `;
+                const downpdf = document.getElementById('buttondownload');
+                downpdf.style.display = 'block';
+           
+
+
+    
+
+            } catch (error) {
+                console.error('Có lỗi xảy ra khi thực hiện fetch:', error);
+                resultsDiv.innerHTML = `<p style="color: red;">Lỗi: ${error.message}</p>`;
+            } finally {
+                // Ẩn spinner và overlay sau khi hoàn tất
+                spinner.style.display = 'none';
+                overlay.style.display = 'none';
+            }
+        }
+
+        async function downloadFileFromBackend() {
+            try {
+                // Gửi yêu cầu GET đến backend để tải tệp
+                const response = await fetch('/download_file/');
+                
+                // Kiểm tra nếu yêu cầu thành công (status code 200)
+                if (response.ok) {
+                    // Tạo một Blob từ nội dung của tệp
+                    const fileBlob = await response.blob();
+                    
+                    // Tạo một phần tử a để tải xuống tệp
+                    const downloadLink = document.createElement('a');
+                    downloadLink.href = URL.createObjectURL(fileBlob);
+                    
+                    // Tạo một tên ngẫu nhiên cho tệp
+                    const randomFileName = 'ocr_vn_' + Math.random().toString(36).substring(7) + '.pdf';
+                    
+                    // Thiết lập tên tệp cho phần tử a
+                    downloadLink.download = randomFileName;
+                    
+                    // Bắt đầu tải xuống bằng cách kích hoạt sự kiện click
+                    downloadLink.click();
+                } else {
+                    // Xử lý lỗi nếu yêu cầu không thành công
+                    console.error('Lỗi khi tải tệp từ backend:', response.statusText);
+                }
+            } catch (error) {
+                // Xử lý lỗi nếu có lỗi xảy ra trong quá trình tải tệp
+                console.error('Lỗi khi tải tệp từ backend:', error);
+            }
+        }
+        
+        
+    
+    </script>
+</body>
+</html>
+

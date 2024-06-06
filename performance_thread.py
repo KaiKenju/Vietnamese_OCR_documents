@@ -1,6 +1,6 @@
 from paddleocr import PaddleOCR, draw_ocr
 
-from image_processing import is_image_sharp, sharpen_image, preprocess_image, detect_table_edges, detect_table_corners, calculate_rotation_angle, process_and_save, convert_pdf_to_docx, rotate_image, deskew
+from image_processing import is_image_sharp, sharpen_image, preprocess_image, detect_table_edges, detect_table_corners, calculate_rotation_angle, process_and_save, convert_pdf_to_docx, rotate_image, deskew, brightness, enhance_brightness
 
 from paddleocr import PaddleOCR
 from vietocr.tool.predictor import Predictor
@@ -15,7 +15,7 @@ from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfbase import pdfmetrics
 import time
 import concurrent.futures
-
+from reportlab.lib.pagesizes import letter
 # # Khởi tạo PaddleOCR
 
 ocr = None
@@ -36,23 +36,25 @@ def recognize_text(box, masked_img):
     return rec_result
 
 # # Khởi tạo VietOCR
-config = Cfg.load_config_from_name('vgg_transformer')
-config['weights'] = './weight/vgg_transformer.pth'
+# config = Cfg.load_config_from_name('vgg_transformer')
+# config['weights'] = './weight/vgg_transformer.pth'
+config = Cfg.load_config_from_file('./config/config_after_trainer.yml')
+config['weights'] = './weight/transformerocr.pth'
 config['cnn']['pretrained'] = False
-config['device'] = 'cpu'
+config['device'] = 'cpu'#'cuda:0' if use gpu
+#config['device'] = 'cuda:0' 
 detector = Predictor(config)
 
 
 def main():
     start_time_total = time.time()
 
-    img_path = './assets/nhohon90.png'
+    img_path = './assets/anh12.png'
     img = cv2.imread(img_path)
     start_time_processing = time.time()
+    # Tăng cường độ sáng nếu cần
+    img = enhance_brightness(img, 240)
     img = preprocess_image(img)
-    # corners, rotation_angle = detect_table_corners(img)
-    # print("Góc xoay của ảnh là:", rotation_angle, "độ")
-    # img = rotate_image(img, rotation_angle)
     img = deskew(img) # check rotation 
     img = preprocess_image(img)
 
@@ -60,7 +62,7 @@ def main():
     boxes = [[[[int(line[0][0]), int(line[0][1])], [int(line[2][0]), int(line[2][1])]] for line in detection_result[0]]][0]
 
     # Mở rộng kích thước của bounding box
-    EXPAND = 5
+    EXPAND = 7
     for box in boxes:
         box[0][0] -= EXPAND
         box[0][1] -= EXPAND
@@ -72,7 +74,7 @@ def main():
 
     end_time_processing = time.time()
     execution_time_processing = end_time_processing - start_time_processing
-   
+
 
     start_time_recognition = time.time()
     # Recognition with multithreading
@@ -84,26 +86,37 @@ def main():
     texts = [result.result() for result in results]
     end_time_recognition = time.time()
     execution_time_recognition = end_time_recognition - start_time_recognition
-
-    c = canvas.Canvas("ocr_final.pdf", pagesize=(img.shape[1], img.shape[0]))
+    
+    page_width, page_height = letter
+    c = canvas.Canvas("ocr_final.pdf", pagesize=(page_width, page_height))
     pdfmetrics.registerFont(TTFont('Times New Roman', 'times.ttf'))
-    image_height = img.shape[0]
+    # image_height = letter
 
     for text, box in zip(texts, boxes):
         x1, y1 = box[0]
         x2, y2 = box[1]
-        x1 += 5  # dịch phải 5 pixel
-        x2 += 5  # dịch phải 5 pixel
+        # x1 += 10  # dịch phải 5 pixel 30
+        # x2 += 5  # dịch phải 5 pixel
         y1 += 10  # dịch xuống 10 pixel 
         y2 += 10
-        
-        y1, y2 = image_height - y1, image_height - y2
-        c.setFont("Times New Roman", 10)
+
+        # if x2 > page_width:
+        # # Điều chỉnh lại vị trí của bounding box để nằm trong giới hạn của trang PDF
+        #     x2 = page_width
+        # # Tính lại vị trí x của điểm đỉnh bên trái của bounding box
+        #     # x1 = x2 - (box[1][0] - box[0][0])
+        #     # x1 += 100
+            
+        #     x1 = max(0, x2 - (x2 - x1))
+          
+        y1, y2 = page_height - y1, page_height - y2
+        c.setFont("Times New Roman", 12)
         c.drawString(x1, y1, text)
     c.save()
     pdf_file = 'ocr_final.pdf'
     docx_file = 'ocr_final_word.docx'
     convert_pdf_to_docx(pdf_file, docx_file)
+   
     end_time_total = time.time()
     execution_time_total = end_time_total - start_time_total
     
