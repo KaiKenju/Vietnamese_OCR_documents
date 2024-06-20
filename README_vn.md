@@ -43,6 +43,9 @@ python performance_thread.py
   </tr>
 </table>
 
+## Video Demo
+https://github.com/m1guelpf/readme-with-video/assets/94727276/2d434abb-7b71-4bca-9e0f-a3baad53a02c
+
 ## 🚀 Cấu trúc của project
 ```[bash]
 Vietnamese_OCR_Documents/
