@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"></script>
+    <title>VOCR</title>
+    <style>
+        .frame{
+            margin-top: 5px;
+            width: 600px;
+            height: 400px;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            border-bottom: 8px solid #DFDFDF; /* Màu đỏ cho viền dưới */
+            border-left: 5px solid #EEE8E8;
+            border-right: 5px solid #EEE8E8;
+        }
+        .drop-zone {
+            margin-top: 5px;
+            width: 500px;
+            height: 300px;
+            border: 2px dashed #ccc;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: #ccc;
+            
+        }
+
+        .drop-zone.dragover {
+            border-color: #000;
+            color: #000;
+        }
+
+        .pointer {
+            cursor: pointer;
+        }
+
+        .overlay, .spinner {
+            display: none;
+        }
+
+        .spinner {
+            border: 8px solid #f3f3f3; /* Giảm độ dày của spinner */
+            border-radius: 50%;
+            border-top: 8px solid #3498db;
+            width: 60px; /* Giảm kích thước chiều rộng */
+            height: 60px; /* Giảm kích thước chiều cao */
+            animation: spin 2s linear infinite;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1001; /* Đảm bảo spinner luôn ở trên cùng */
+        }
+    
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* Độ mờ của overlay */
+            z-index: 1000; /* Đảm bảo overlay nằm dưới spinner */
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 0;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 2em;
+            color: #023C89;
+        }
+
+        nav a {
+            margin: 0 1em;
+            color: #023C89;
+            text-decoration: none;
+        }
+       
+        .hole{
+            width: 100%;
+            
+        }
+        .hero {
+            width: 100%;
+            height: 50vh;
+            background-color: #ffF5F5;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            margin-top: 50px;
+            background-image: url('/static/simple_bg.jpg');
+        }
+
+        .hero-title {
+            font-size: 2em;
+            color: #0a0a0a;
+            text-align: center;
+            font-family: 'Quicksand', sans-serif;
+        }
+
+        .hero-image {
+            width: 100%;
+            height: 50px;
+            /*background-color: #FFF;*/
+            margin-bottom: 0;
+        }
+
+        .hero-buttons {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            margin-top: 1em;
+        }
+
+        .hero-buttons button {
+            padding: 0.5em 1em;
+            border: none;
+            border-radius: 5px;
+            background-color: #E6F5FF;
+            color: #003366;
+            cursor: pointer;
+        }
+
+        .content {
+            width: 80%;
+            margin-top: 2em;
+            text-align: center;
+            position: relative;
+        }
+
+        .content p {
+            margin: 1em 0;
+            color: #666;
+        }
+
+        .content img {
+            width: 100%;
+            height: auto;
+        }
+
+        .content::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom right, #FFF5F5, #FFF5F5);
+            z-index: -1;
+            box-shadow: 0 0 2em rgba(0, 0, 0, 0.2);
+        }
+
+        .container {
+            margin-bottom: 10px;
+            width: 100%;
+            max-width: 1200px;
+            padding: 0px;
+            overflow: hidden;
+            margin: 0 auto;
+        }
+        .dot1, .dot2, .dot3 {
+            height: 16px;
+            width: 16px;
+            border-radius: 50%;
+            display: inline-block;
+            
+        }
+        .anser{
+            margin-top:2%;
+        }
+        .ItemHeading{
+            margin-left: 2%;
+            font-size: 25px;
+        }
+        .hr {
+            width: 100%; /* Chiều rộng của đường kẻ */
+            height: 2px; /* Chiều cao của đường kẻ */
+            background-color: black; /* Màu sắc của đường kẻ */
+            margin: 20px 0; /* Khoảng cách giữa đường kẻ và nội dung xung quanh */
+        }
+        .close-button {
+            display: none; /* Ẩn nút ban đầu, hiển thị khi cần thiết */
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            color: #0c0c0c; /* Màu chữ */
+            border: none; /* Không viền */
+            border-radius: 50%; /* Hình dạng tròn */
+            width: 20px; /* Chiều rộng */
+            height: 20px; /* Chiều cao */
+            font-size: 16px; /* Kích thước chữ */
+            cursor: pointer; /* Con trỏ chuột */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    
+        .close-button:hover {
+            color: #ff0000; /* Màu nền khi hover */
+        }
+        #toggleButton {
+            
+            background-color: #2a302a; /* Màu nền xanh lá cây */
+            border: none; /* Loại bỏ viền */
+            color: white; /* Màu chữ trắng */
+            padding: 15px 32px; /* Khoảng đệm trong nút */
+            text-align: center; /* Canh giữa chữ */
+            text-decoration: none; /* Loại bỏ gạch chân */
+            display: inline-block; /* Hiển thị theo dòng */
+            font-size: 16px; /* Kích thước chữ */
+            margin: 4px 2px; /* Khoảng cách xung quanh nút */
+            cursor: pointer; /* Thay đổi con trỏ chuột khi hover */
+            border-radius: 12px; /* Bo tròn góc */
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); /* Đổ bóng */
+            transition: background-color 0.3s ease; /* Hiệu ứng chuyển màu nền */
+        }
+    
+        #toggleButton:hover {
+            background-color: #45a049; /* Màu nền khi hover */
+        }
+
+        #copyButton{
+            border: none;
+        }
+        #downloadButton{
+            border: none;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
+            <nav class="navbar navbar-light bg-light">
+                <a class="navbar-brand" href="/static/c.html">
+                  <img src="/static/vocr.png" style="margin-right: 150px;" width="120" height="50" class="d-inline-block align-top" alt="">
+                </a>
+            </nav>
+        
+          <ul class="nav nav-pills" style="padding-left: 100px; margin-right:25px;margin-top:20px;margin-left:150px; font-size:16px;">
+            <li class="nav-item"><a href="#" class="nav-link" style="color:#000" aria-current="page">Home</a></li>
+            <li class="nav-item"><a href="#" class="nav-link" style="color:#000">PDF To Text</a></li>
+            <li class="nav-item"><a href="#" class="nav-link" style="color:#000">PDF To Word</a></li>
+            <li class="nav-item"><a href="#" class="nav-link" style="color:#000">Image To Text</a></li>
+            <li class="nav-item"><a href="#" class="nav-link" style="color:#000">Contact</a></li>
+          </ul>
+        </header>
+    </div>
+    
+    <div class="hole" style="align-items: flex-start;">
+        
+        <div class="hero" style="flex: 1; display: flex; flex-direction: column;">
+            <input type="file" id="fileInput" style="display: none;" onchange="fileSelected(event)">
+            <div class="hero-title">Hình ảnh thành Văn bản</div>
+            <div class="hero-image">Chuyển đổi hình ảnh sang văn bản(Trích xuất văn bản từ hình ảnh)</div>
+            
+            <div class="frame" id="frame">
+                <div class="drop-zone" id="drop-zone" ondrop="dropHandler(event)" ondragover="dragOverHandler(event)" >
+                    <img class="uploadFileImg" width="120" height="30%" src="https://www.ocr.best/assets/images/Group42.svg" alt="image to text">
+                    <p style="color:#9b9797; margin-top:10px;">Kéo và thả file vào đây</p>
+                    <p style="color:#9b9797">hoặc</p>
+                    <div class="folderbox">
+                        <label for="fileInput" class="pointer">
+                            <img src="https://www.ocr.best/assets/images/My file.svg" alt="file text" width="22" height="100%">
+                        </label>
+                        <span id="url-togal" class="pointer" style="margin-left:20px;" onclick="sendImage()">
+                            <img src="https://www.ocr.best/assets/images/Url (1).svg" width="20" height="100%" alt="url folder">
+                        </span>
+                    </div>
+                </div>
+            </div>
+            
+
+            <div id="imageContainer" style="position: relative;">
+                <div id="textupload" style="margin-left:-280px; margin-top:20px; font-weight: bold; display:none;">Upload image</div>
+                <img id="previewImage" src="#" alt="Preview Image" style="display: none; max-width: 100px; max-height: 100px;margin-right:20px;;margin-bottom:5px;">
+                <span id="fileName" style="display: none;"></span>
+                <button id="closePreview" onclick="closePreview()" class="close-button" style="display: none; position: absolute; margin-top:10px; right: 0px;">X</button>
+            </div>
+            <div class="overlay" id="overlay"></div>
+            <div class="spinner" id="spinner"></div>
+        
+            <button type="button" id="toggleButton" onclick="uploadImage()" style="display:none; margin-top:10px;" >Chuyển đổi</button> <!-- Thêm dòng này -->
+            <div class="results" id="results">
+                <div id="recognizedText" style="text-align: left; margin-top:40px;"></div>
+            </div>
+        </div>
+        <!-- <img src="/static/bgg.png" alt=""> -->
+    </div>
+    
+
+    
+    <!-- ################################################ -->
+
+    <div class="feature-section">
+        <div class="feature-heading" style="text-align: center;margin-bottom:50px;margin-top:50px;">
+            <h2>
+            Our Features
+            </h2>
+        </div>
+
+        <div class="feature-footer" style="display: flex; flex-wrap: wrap; gap:200px">
+            <div class="feature-right" style="margin-top:120px;">
+                <div class="inner">
+                    <h4>
+                    Drag and drop feature that give us best experience.
+                    </h4>
+                    <div class="innerlist">
+                        <div class="listItem">
+                            <span class="dot1" style="background-color: #6ECECE;margin-right:10px; "></span><span class="dotText">
+                            Add &amp; delete plan easily
+                            </span>
+                        </div>
+                        <div class="listItem">
+                            <span class="dot2" style="background-color: #A774FF; margin-right:10px; "></span>
+                            <span class="dotText">
+                                Edit your good preview on cardy
+                            </span>
+                        </div>
+                        <div class="listItem">
+                            <span class="dot3" style="background-color: #F5A275;margin-right:10px; "></span>
+                            <span class="dotText">
+                            Easy to use like playing game
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="feature-left">
+                <div class="first-row" style="display: flex; justify-content: space-around;">
+                    <div class="box1">
+                        <img width="48px" height="30%" alt="Best OCR Online" src="https://www.ocr.best/assets/images/Group120.svg">
+                        <h3 class="heading" >
+                        Best Free OCR Online
+                        </h3>
+                        <p class="detail"></p>
+                        <p style="max-width: 300px;">
+                        We have the best online OCR tool that converts image to text using A.I techniques.
+                        </p>
+                        <p></p>
+                    </div>
+                    <div class="box2">
+                        <img width="48px" height="30%" alt="No Daily Limit" src="https://www.ocr.best/assets/images/Group124.svg">
+                        <h3 class="heading">
+                        No Daily Limit
+                        </h3>
+                        <p class="detail"></p>
+                        <p style="max-width: 300px;">
+                        Convert unlimited pictures into text with no daily limit.
+                        </p>
+                        <p></p>
+                    </div>
+                </div>
+                <div class="second-row" style="display: flex; justify-content: space-around;">
+                    <div class="box1">
+                    <img width="48px" height="30%" alt="Any Type of pic" src="https://www.ocr.best/assets/images/Group123.svg">
+                    <h3 class="heading">
+                    Any Type of pic
+                    </h3>
+                    <p class="detail"></p>
+                        <p style="max-width: 300px;">
+                        Our free online OCR converter can get a text from scanned documents, images, and PDFs.
+                        </p>
+                    <p></p>
+                    </div>
+                    <div class="box2">
+                    <img width="48px" height="30%" alt="Copy / Download" src="https://www.ocr.best/assets/images/Group143.svg">
+                    <h3 class="heading">
+                    Copy / Download
+                    </h3>
+                    <p class="detail"></p>
+                        <p style="max-width: 300px;">
+                        Download word file or copy text from the image with just one click.
+                        </p>
+                    <p></p>
+                    </div>
+                </div>
+
+            </div>
+            
+        </div>
+    </div>
+
+
+    <div class="content-section">
+        <div class="quationAnser" style="margin-left:10%; margin-right:10%; margin-top:1%;">
+            <h2 class="quation">How to use Free online OCR converter?</h2>
+            <div class="anser">
+                <p>We are going to discuss that how you can use this best OCR online free tool to extract text from images and PDFs:</p>
+                <ul>
+                    <li>Drag and drop Image to the input field</li>
+                    <li>Or you can also upload a file from your device</li>
+                    <li>Verify the reCAPTCHA.&nbsp;</li>
+                    <li>Click on the&nbsp;<strong>Convert</strong>&nbsp;button</li>
+                    <li>You’ll get the editable text</li>
+                    <li>You can copy the text or download it as a docx or .txt file.</li>
+                </ul>
+            </div>
+        
+            <h2 class="quation">What is OCR.best?</h2>
+            <div class="anser">
+                <p><a href="https://www.ocr.best/">OCR.best</a> is an AI-based tool that converts images &amp; PDFs into editable text accurately. Use this online free OCR converter to <a href="https://www.ocr.best/blog/how-does-ocr-extract-text-from-images">extract text from images</a> for free. With this OCR converter online, you can convert image to text at one click and its totally free.</p>
+            </div>
+        
+            <h2 class="quation">What is an online OCR translator?</h2>
+            <div class="anser">
+                <p>Online OCR translator is a tool that allows you to translate images, PDFs, and documents into text for free. It compares objects from the image with objects from the tool's database at a microscopic level. Our Image OCR tool takes advantage of advanced OCR technology to make comparisons. Its core recognition program is powered by two of the best machine-learning libraries,&nbsp;<a href="https://developers.google.com/machine-learning/crash-course/first-steps-with-tensorflow/toolkit" target="_blank" rel="noopener">TensorFlow&nbsp;</a>and&nbsp;<a href="https://en.wikipedia.org/wiki/Scikit-learn" target="_blank" rel="noopener">Scikit-learn</a>.</p>
+            </div>
+        
+
+            <div class="detailOption" style="display: flex; justify-content: center; align-items: center; flex-wrap: wrap; margin-left:10%">
+                <div class="detailOptionItem optionColor1" style="flex-grow: 1;">
+                    <img style="margin-left:2%" alt="image" src="https://www.ocr.best/assets/images/optionImage1new.svg" loading="lazy" width="70" height="70">
+                    <p class="ItemHeading" style="margin-left:3%">
+                    OCR
+                    </p>
+                    <div class="containItemtext">
+                        <p class="ItemText" style="max-width: 200px;">
+                        Extracts data from structured docs
+                        </p>
+                        <img style="margin-left:5%" alt="image" src="https://www.ocr.best/assets/images/optionImage4new.svg" width="40" height="100">
+                        <p class="ItemText" style="max-width: 200px;">
+                        A template is used to target extraction points
+                        </p>
+                    </div>
+                </div>
+        
+                <div class="detailOptionItem optionColor2" style="flex-grow: 1; margin-top:2%">
+                    <img style="margin-left:3%" alt="image" src="https://www.ocr.best/assets/images/optionImage2new.svg" loading="lazy" width="100" height="70">
+                    <p class="ItemHeading" style="margin-left:5%">
+                    OCR + ML
+                    </p>
+                    <div class="containItemtext">
+                    <p class="ItemText" style="max-width: 200px;">
+                    Extracts data structured docs with some variations
+                    </p>
+                    <img style="margin-left:13%" alt="image" src="https://www.ocr.best/assets/images/optionImage4new.svg" width="40" height="100">
+                    <p class="ItemText" style="max-width: 200px;">
+                    ML is used to help fit documents into a template soan OCR can process it
+                    </p>
+                    </div>
+                </div>
+        
+                <div class="detailOptionItem optionColor3" style="flex-grow: 1; margin-top:0%">
+                    <img style="margin-left:7%" alt="image" src="https://www.ocr.best/assets/images/optionImage3new.svg" loading="lazy" width="120" height="70">
+                    <p class="ItemHeading" style="margin-left:-7%">
+                    Intelligent Data Processing
+                    </p>
+                    <div class="containItemtext">
+                    <p class="ItemText" style="max-width: 250px;">
+                    Extracts information from unstructured docs and images
+                    </p>
+                    <img style="margin-left:15%" alt="image" src="https://www.ocr.best/assets/images/optionImage4new.svg" width="40" height="100">
+                    <p class="ItemText" style="max-width: 250px;">
+                    ML finds, extracts, and cleans extraction points (template -free)
+                    </p>
+                    </div>
+                </div>
+            </div>
+        
+
+            <h2 class="quation">How does free online OCR work</h2>
+        
+            <div class="quationLeft" style="display: flex; justify-content: space-around; align-items: center;">
+                <div class="leftSectionQ" style="max-width: 700px;">
+                    <p>There were the times when we needed to retrieve data from the images and the process of writing every word from an image was a hectic task. AI OCR online tool is developed as a solution to this problem. All you need to do is upload the specified image, and this OCR photo to text converter will convert it to text in a matter of seconds.</p>
+                </div>
+        
+                <div class="rightSectionQ">
+                    <img width="75%" height="750%" alt="image" src="https://www.ocr.best/assets/images/quationImageRight.svg" loading="lazy">
+                </div>
+            </div>
+        
+            <h2 class="quation">Why do we need online OCR converter?</h2>
+            <div class="anser">
+                <p>Using an AI online OCR free tool for OCR picture to text conversion improves the process of automation. It makes our tasks more hassle-free as well as error-free. The tool will help decrease your efforts and increase your productivity especially when you have to convert bulk&nbsp;<a href="https://ocr.best/image-to-text" target="_blank" rel="noopener">images to text</a>. The good thing about Image to free ocr online converter is that you can convert photos to text by just uploading the OCR image online with a single click. This OCR free online converter provides a simple interface for converting image to text. Credit should be given where it’s due, our dedicated team of developers did an outstanding job by developing the recognition algorithms to achieve 100% accuracy.</p>
+            </div>
+        
+            <!-- Nội dung phần tiếp theo của div lớn ở giữa -->
+            <div class="FrequentlyAskQuestions" style="margin-top: 5%;">
+                <h2 class="FQheading" style="text-align: center;">
+                Frequently Asked Questions
+                </h2>
+                <div class="FQSection">
+                    <div class="FQquation">
+                        <h3>
+                        How can I convert images to text free?
+                        </h3>
+                        <div class="FQMinMax">
+                        </div>
+                    </div>
+                    <div class="ans">
+                        <p>OCR.best's online image to text OCR online converter lets you easily transform any image into text without paying for it. All you have to do is upload the image and copy the text.</p>
+                    </div>
+                    <div class="hr"></div>
+                    <div class="FQquation">
+                        <h3>
+                        How do I convert a picture to normal text?
+                        </h3>
+                        <div class="FQMinMax">
+                        </div>
+                    </div>
+                    <div class="ans">
+                        <p>If your picture has some text and you want to copy this text, an online ocr translator is helpful in this scenario. It will instantly convert the image into text with better accuracy.</p>
+                    </div>
+                    <div class="hr"></div>
+                    <div class="FQquation">
+                        <h3>
+                        How do I extract text from a screenshot?
+                        </h3>
+                        <div class="FQMinMax">
+                        </div>
+                    </div>
+                    <div class="ans">
+                        <div class="ans"><p>Go to OCR.best. Upload the screenshot once you have taken it. It will convert it to text automatically.&nbsp; Then you can copy or download on your device.</p></div>
+                    </div>
+                    <div class="hr"></div>
+                    <div class="FQquation">
+                        <h3>
+                        What is a good tool to extract text from image online?
+                        </h3>
+                        <div class="FQMinMax">
+                        </div>
+                    </div>
+                    <div class="ans">
+                    <p>OCR.best is a free tool that you can use to extract text from images online. There are a lot of different alternatives as well, such as&nbsp;<a href="https://www.imagetotext.info/" target="_blank" rel="noopener">Imagetotext.info</a>&nbsp;that you can also try for free.</p>
+                    </div>
+                    <div class="hr"></div>
+                    </div>
+            </div>
+        </div>
+        
+        
+        
+    </div>
+
+</body>
+<script>
+    function dropHandler(event) {
+        event.preventDefault();
+        const files = event.dataTransfer.files;
+        handleFiles(files);
+    }
+
+    function dragOverHandler(event) {
+        event.preventDefault();
+    }
+
+    function fileSelected(event) {
+        const files = event.target.files;
+        handleFiles(files);
+    }
+    function closePreview() {
+        const previewImage = document.getElementById('previewImage');
+        const toggleButton = document.getElementById('toggleButton');
+        const texthide = document.getElementById('textupload');
+        const fileNameSpan = document.getElementById('fileName');
+        const dropZone = document.getElementById('frame');
+        const closeButton = document.getElementById('closePreview');
+        const fileInput = document.getElementById('fileInput');
+        const resultsDiv = document.getElementById('results'); 
+    
+        // Ẩn các thành phần preview
+        previewImage.style.display = 'none';
+        texthide.style.display = 'none';
+        toggleButton.style.display = 'none';
+        fileNameSpan.style.display = 'none';
+        closeButton.style.display = 'none';
+    
+    
+        dropZone.style.display = 'flex';
+        fileInput.value = '';
+
+        // Ẩn resultsDiv
+        resultsDiv.style.display = 'none'; 
+    }
+
+    function handleFiles(files) {
+        const previewImage = document.getElementById('previewImage');
+        const toggleButton = document.getElementById('toggleButton');
+        const texthide = document.getElementById('textupload');
+        const fileNameSpan = document.getElementById('fileName');
+        const dropZone = document.getElementById('frame'); 
+        const closeButton = document.getElementById('closePreview');
+        
+        if (files && files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                previewImage.src = e.target.result;
+                previewImage.style.display = 'block';
+                texthide.style.display = 'block';
+                toggleButton.style.display = 'block'; // Hiển thị nút "chuyển đổi"
+                previewImage.style.display = 'inline';
+                
+                const maxLength = 30; // Độ dài tối đa của tên file bạn muốn hiển thị
+                const ellipsis = '...'; // Chuỗi dấu chấm ba để chỉ ra rằng có phần bị ẩn đi
+                let fileName = files[0].name;
+                if (fileName.length > maxLength) {
+                    const startLength = Math.ceil(maxLength / 2);
+                    const endLength = maxLength - startLength;
+                    const startPart = fileName.substring(0, startLength);
+                    const endPart = fileName.substring(fileName.length - endLength);
+                    fileName = startPart + ellipsis + endPart;
+                }
+                fileNameSpan.textContent = fileName;
+                fileNameSpan.style.display = 'inline';
+
+
+                dropZone.style.display = 'none';
+                closeButton.style.display = 'block'; 
+            };
+            reader.readAsDataURL(files[0]);
+        }
+    }
+
+    function sendImage() {
+        // Xử lý việc gửi ảnh lên máy chủ ở đây
+    }
+    function showSpinner() {
+        document.getElementById('spinner').style.display = 'block';
+        document.getElementById('overlay').style.display = 'block';
+    }
+
+    function hideSpinner() {
+        document.getElementById('spinner').style.display = 'none';
+        document.getElementById('overlay').style.display = 'none';
+    }
+
+    // Ví dụ sử dụng
+    
+
+    async function uploadImage() {
+        const fileInput = document.getElementById('fileInput');
+        const resultsDiv = document.getElementById('results');
+        const spinner = document.getElementById('spinner');
+        const overlay = document.getElementById('overlay');
+        const recognizedTextDiv = document.getElementById('recognizedText');
+        
+        if (fileInput.files.length === 0) {
+            alert('Vui lòng chọn một hình ảnh để tải lên');
+            return;
+        }
+    
+        const formData = new FormData();
+        formData.append('image', fileInput.files[0]);
+        showSpinner();
+        // Hiển thị spinner và overlay
+        spinner.style.display = 'block';
+        overlay.style.display = 'block';
+    
+        try {
+            const response = await fetch('/process_image/', {
+                method: 'POST',
+                body: formData
+            });
+    
+            if (!response.ok) {
+                throw new Error('Phản hồi từ máy chủ không hợp lệ: ' + response.statusText);
+            }
+    
+            const data = await response.json();
+    
+            recognizedTextDiv.innerHTML = `
+                <h5 style="display: flex; justify-content: space-between; align-items: center;">
+                    Văn bản nhận dạng:
+                    <div>
+                        <button type="button" id="copyButton" onclick="copyTextToClipboard()"><img src="/static/icons8copy.png" alt="Copy"></button>
+                        <button type="button" id="downloadButton" onclick="downloadFileFromBackend()"><img src="/static/icons8download25.png" alt="Download"></button>
+                    </div> 
+                </h5>
+                <div class="aaa" style="margin-left: 20px; max-height: 200px; overflow-y: auto; border: 1px solid #ccc; padding: 10px;">
+                    ${data.texts.reverse().map(text => `<span style="display: block; font-size: 14px;">${text.charAt(0).toUpperCase() === text.charAt(0) ? text : '- ' + text}</span>`).join('')}
+                </div>
+            `;
+            
+        } catch (error) {
+            console.error('Có lỗi xảy ra khi thực hiện fetch:', error);
+            resultsDiv.innerHTML = `<p style="color: red;">Lỗi: ${error.message}</p>`;
+        } finally {
+            spinner.style.display = 'none';
+            overlay.style.display = 'none';
+            resultsDiv.style.display = 'block'; 
+        }
+    }
+    async function downloadFileFromBackend() {
+        try {
+            // Gửi yêu cầu GET đến backend để tải tệp
+            const response = await fetch('/download_file/');
+            
+            // Kiểm tra nếu yêu cầu thành công (status code 200)
+            if (response.ok) {
+                // Tạo một Blob từ nội dung của tệp
+                const fileBlob = await response.blob();
+                
+                // Tạo một phần tử a để tải xuống tệp
+                const downloadLink = document.createElement('a');
+                downloadLink.href = URL.createObjectURL(fileBlob);
+                
+                // Tạo một tên ngẫu nhiên cho tệp
+                const randomFileName = 'ocr_vn_' + Math.random().toString(36).substring(7) + '.docx';
+                
+                // Thiết lập tên tệp cho phần tử a
+                downloadLink.download = randomFileName;
+                
+                // Bắt đầu tải xuống bằng cách kích hoạt sự kiện click
+                downloadLink.click();
+            } else {
+                // Xử lý lỗi nếu yêu cầu không thành công
+                console.error('Lỗi khi tải tệp từ backend:', response.statusText);
+            }
+        } catch (error) {
+            // Xử lý lỗi nếu có lỗi xảy ra trong quá trình tải tệp
+            console.error('Lỗi khi tải tệp từ backend:', error);
+        }
+    }
+    function copyTextToClipboard() {
+        const textElement = document.querySelector('.aaa'); // Chọn đối tượng div chứa văn bản
+        const textToCopy = textElement.innerText; // Lấy nội dung văn bản
+
+        navigator.clipboard.writeText(textToCopy)
+            .then(() => {
+                alert('Đã sao chép văn bản thành công vào clipboard!');
+            })
+            .catch(err => {
+                console.error('Lỗi khi sao chép văn bản vào clipboard:', err);
+                alert('Đã xảy ra lỗi khi sao chép văn bản!');
+            });
+    }
+
+    // Sự kiện click vào nút sao chép
+    document.getElementById('copyButton').addEventListener('click', copyTextToClipboard);
+   
+</script>
+</html>

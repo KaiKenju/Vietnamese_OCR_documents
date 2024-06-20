@@ -41,6 +41,9 @@ python performance_thread.py
   </tr>
 </table>
 
+## Video Demo
+[Watch the video](https://youtu.be/QuPJLhPImc4)
+
 ## 🚀 Structure Project
 ```[bash]
 Vietnamese_OCR_Documents/
