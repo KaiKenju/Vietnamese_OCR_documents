@@ -42,8 +42,10 @@ python performance_thread.py
 </table>
 
 ## Video Demo
+[Watch the video](https://www.google.com/url?sa=i&url=https%3A%2F%2Fdichthuatsaigon.vn%2Fvan-ban-hanh-chinh%2F&psig=AOvVaw2MnsvbtDvbQ50FMBwC-QQv&ust=1718954270661000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCMihkufR6YYDFQAAAAAdAAAAABAd)(https://youtu.be/QuPJLhPImc4)
 
-{@youtube: https://youtu.be/QuPJLhPImc4}
+<iframe width="560" height="315" src="https://youtu.be/QuPJLhPImc4" frameborder="0" allowfullscreen></iframe>
+
 ## 🚀 Structure Project
 ```[bash]
 Vietnamese_OCR_Documents/
