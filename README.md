@@ -42,7 +42,7 @@ python performance_thread.py
 </table>
 
 ## Video Demo
-[Watch the video](https://youtu.be/QuPJLhPImc4)
+[Watch the video](https://www.google.com/url?sa=i&url=https%3A%2F%2Fdichthuatsaigon.vn%2Fvan-ban-hanh-chinh%2F&psig=AOvVaw2MnsvbtDvbQ50FMBwC-QQv&ust=1718954270661000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCMihkufR6YYDFQAAAAAdAAAAABAd)(https://youtu.be/QuPJLhPImc4)
 
 ## 🚀 Structure Project
 ```[bash]
