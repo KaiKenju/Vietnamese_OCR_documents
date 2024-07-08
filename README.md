@@ -34,7 +34,7 @@ python main.py
 python performance_thread.py
 ```
 
-Besides, you can run the app.py to show the website(localhost) or see the video demo below
+Besides, you can run the [app.py](app.py) to show the website(localhost) or see the video demo below
 ## 📝 Result
 <table>
   <tr>
