@@ -70,6 +70,7 @@ Vietnamese_OCR_Documents/
 [PaddleOCR](https://github.com/PaddlePaddle/PaddleOCR/tree/main) is an open source framework developed by Baidu PaddlePaddle to support the recognition and extraction of information from images. Initially, PaddleOCR supported recognition of English, Chinese, numbers, and processing of long texts. Currently, it has expanded its support to more languages ​​such as Japanese, Korean, German,... However, PaddleOCR does not currently support Vietnamese.
 
 🌟 Features:
+
 [PaddleOCR](https://github.com/PaddlePaddle/PaddleOCR/blob/main/README_en.md) support a variety of cutting-edge algorithms related to OCR, and developed industrial featured models/solution PP-OCR、 PP-Structure and PP-ChatOCR on this basis, and get through the whole process of data production, model training, compression, inference and deployment.
 
 ![image](https://github.com/KaiKenju/Vietnamese_OCR_documents/assets/94727276/75d28e4d-c8cd-4738-bd8e-8fb20643026a)
@@ -80,7 +81,11 @@ In the paddle's configuration file, [DB](https://arxiv.org/pdf/1911.08947) (Diff
 ## 🚀 VietOCR
 
 [VietOCR](https://github.com/pbcquoc/vietocr) is a combination of AttentionOCR and TransformerOCR
+
+[AttentionOCR](https://arxiv.org/pdf/1706.03762)
 ![image](https://github.com/KaiKenju/Vietnamese_OCR_documents/assets/94727276/c1350449-14b0-4a8c-81fe-c1740e1a6880)
+
+[TransformerOCR](https://pbcquoc.github.io/transformer/)
 ![image](https://github.com/KaiKenju/Vietnamese_OCR_documents/assets/94727276/83a37c72-b84e-400c-bd7c-289dafc91149)
 
 [VietOCR](https://pbcquoc.github.io/vietocr/) library was built by me with the purpose of supporting you to use it to solve problems related to OCR in industry. The library provides both AtentionOCR and TransformerOCR architectures. Although the TransformerOCR architecture works quite well in NLP, in my opinion, the accuracy does not have a significant improvement compared to AttentionOCR and the prediction time is much slower.
