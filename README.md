@@ -33,6 +33,8 @@ python main.py
 ```[bash]
 python performance_thread.py
 ```
+
+Besides, you can run the app.py to show the website(localhost) or see the video demo below
 ## 📝 Result
 <table>
   <tr>
