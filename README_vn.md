@@ -69,6 +69,7 @@ Vietnamese_OCR_Documents/
 
 ## 🚀 Detection: PaddleOCR
 [PaddleOCR](https://github.com/PaddlePaddle/PaddleOCR/tree/main) là một  mã nguồn mở được phát triển bởi Baidu PaddlePaddle để hỗ trợ nhận dạng và trích xuất thông tin từ hình ảnh. Ban đầu, PaddleOCR hỗ trợ nhận dạng tiếng Anh, tiếng Trung, số và xử lý văn bản dài. Hiện tại nó đã mở rộng hỗ trợ sang nhiều ngôn ngữ hơn như tiếng Nhật, tiếng Hàn, tiếng Đức,… Tuy nhiên, PaddleOCR hiện chưa hỗ trợ tiếng Việt.
+
 🌟 Features:
 
 [PaddleOCR](https://github.com/PaddlePaddle/PaddleOCR/blob/main/README_en.md) hỗ trợ nhiều thuật toán tiên tiến liên quan đến OCR và phát triển các mô hình/giải pháp đặc trưng công nghiệp PP-OCR, PP-Structure và PP-ChatOCR trên cơ sở này, đồng thời thực hiện toàn bộ quá trình sản xuất dữ liệu, đào tạo mô hình, nén, suy luận và triển khai.
