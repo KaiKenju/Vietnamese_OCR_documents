@@ -66,3 +66,29 @@ Vietnamese_OCR_Documents/
         ├── README.md                 # phiên bản tiếng anh
         ├── README_vn.md              # phiên bản tiếng việt
 ```
+
+## 🚀 Detection: PaddleOCR
+[PaddleOCR](https://github.com/PaddlePaddle/PaddleOCR/tree/main) là một  mã nguồn mở được phát triển bởi Baidu PaddlePaddle để hỗ trợ nhận dạng và trích xuất thông tin từ hình ảnh. Ban đầu, PaddleOCR hỗ trợ nhận dạng tiếng Anh, tiếng Trung, số và xử lý văn bản dài. Hiện tại nó đã mở rộng hỗ trợ sang nhiều ngôn ngữ hơn như tiếng Nhật, tiếng Hàn, tiếng Đức,… Tuy nhiên, PaddleOCR hiện chưa hỗ trợ tiếng Việt.
+🌟 Features:
+
+[PaddleOCR](https://github.com/PaddlePaddle/PaddleOCR/blob/main/README_en.md) hỗ trợ nhiều thuật toán tiên tiến liên quan đến OCR và phát triển các mô hình/giải pháp đặc trưng công nghiệp PP-OCR, PP-Structure và PP-ChatOCR trên cơ sở này, đồng thời thực hiện toàn bộ quá trình sản xuất dữ liệu, đào tạo mô hình, nén, suy luận và triển khai.
+
+![image](https://github.com/KaiKenju/Vietnamese_OCR_documents/assets/94727276/75d28e4d-c8cd-4738-bd8e-8fb20643026a)
+
+Trong cấu hình paddle file , [DB](https://arxiv.org/pdf/1911.08947) (Differentiable Binarization) thường được sử dụng để phát hiện văn bản một cách chính xác, nhanh chóng với mọi hình dạng
+
+![image](https://github.com/KaiKenju/Vietnamese_OCR_documents/assets/94727276/a59ae091-80e7-40e7-8ddb-0d7e52e91b07)
+
+## ⚡ Recognition: VietOCR
+
+[VietOCR](https://github.com/pbcquoc/vietocr) là sự kết hợp giữa AttentionOCR và TransformerOCR
+
+[AttentionOCR](https://arxiv.org/pdf/1706.03762)
+
+![image](https://github.com/KaiKenju/Vietnamese_OCR_documents/assets/94727276/c1350449-14b0-4a8c-81fe-c1740e1a6880)
+
+[TransformerOCR](https://pbcquoc.github.io/transformer/)
+
+![image](https://github.com/KaiKenju/Vietnamese_OCR_documents/assets/94727276/83a37c72-b84e-400c-bd7c-289dafc91149)
+
+Thư viện [VietOCR](https://pbcquoc.github.io/vietocr/) được xây dựng với mục đích hỗ trợ các bạn sử dụng nó để giải quyết các vấn đề liên quan đến OCR trong công nghiệp. Thư viện cung cấp cả kiến ​​trúc AtentionOCR và TransformerOCR. Mặc dù kiến ​​trúc TransformerOCR hoạt động khá tốt trong NLP nhưng theo tôi độ chính xác không có sự cải thiện đáng kể so với Chú ýOCR và thời gian dự đoán chậm hơn nhiều.
