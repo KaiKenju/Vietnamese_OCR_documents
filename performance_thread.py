@@ -94,8 +94,9 @@ class OCRProcessor:
             c.drawString(x1, y1, text)
         c.save()
 
-    def convert_pdf_to_docx(self, pdf_file, docx_file):
+    def convert_pdf_to_docx1(self, pdf_file, docx_file):
         convert_pdf_to_docx(pdf_file, docx_file)
+    
 
     def execute(self, img_path, pdf_path, docx_path):
         start_time_total = time.time()
@@ -106,7 +107,7 @@ class OCRProcessor:
         end_time_recognition = time.time()
 
         self.create_pdf(texts, boxes, img.shape, pdf_path)
-        self.convert_pdf_to_docx(pdf_path, docx_path)
+        self.convert_pdf_to_docx1(pdf_path, docx_path)
         
         end_time_total = time.time()
 
