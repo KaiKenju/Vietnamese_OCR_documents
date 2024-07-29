@@ -82,7 +82,7 @@ In the paddle's configuration file, [DB](https://arxiv.org/pdf/1911.08947) (Diff
 
 ## ⚡ Recognition: VietOCR
 
-[VietOCR](https://github.com/pbcquoc/vietocr) is a combination of AttentionOCR and TransformerOCR
+[VietOCR](https://github.com/pbcquoc/vietocr) is a combination of CNN and  Languages Model :TransformerOCR  or AttentionOCR
 
 [AttentionOCR](https://arxiv.org/pdf/1706.03762)
 
