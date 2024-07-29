@@ -61,7 +61,8 @@ Vietnamese_OCR_Documents/
           ├── app.py                    # demo web(local-host) using FastAPI 
           ├── Core_OCR.ipynb            # notebook paddleOCR + vietOCR
           ├── image_processing.py       # image processing
-          ├── main.py 
+          ├── main.py
+          ├── multi_page.py             # core OCR multi_page PDF --> Word
           ├── performance_thread.py     # performance optimization (faster main.py using thread)
           ├── Pretrained_vietOCR.ipynb  # training VietOCR
           ├── requirements.txt     
