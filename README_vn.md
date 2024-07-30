@@ -53,6 +53,7 @@ Vietnamese_OCR_Documents/
         ├── config/                   # lựa chọn config cho hệ thống OCR 
         ├── cropped_images/           # ảnh được cắt để nhận dạng tiếng việt
         ├── folder_file_api/          # file pdf ,word sinh ra từ OCR
+        ├── Multi_page/               # folder chứa PDF và Word sau khi thực hiện OCR nhiều trang PDF
         ├── weight/                   # trọng số 
         ├── PaddleOCR/                # Paddle repositories
         ├── static/                   # front-end 

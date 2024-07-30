@@ -55,6 +55,7 @@ Vietnamese_OCR_Documents/
           ├── config/                   #  configuration files and options for OCR system
           ├── cropped_images/           # Images are cropped for recognition purposes
           ├── folder_file_api/          # file pdf,word after OCR for web-app using Fast-api
+          ├── Multi_page/               # folder containing PDF and Word after  OCR on multiple PDF pages
           ├── weight/                   # The weight  of system
           ├── PaddleOCR/                # Paddle repositories
           ├── static/                   # front-end 
