@@ -44,20 +44,23 @@ class OCRProcessor:
         detection_result = self.ocr.ocr(img, cls=False, det=True, rec=False)
         boxes = [[[[int(line[0][0]), int(line[0][1])], [int(line[2][0]), int(line[2][1])]] for line in detection_result[0]]][0]
 
-        EXPAND = 7
+        EXPAND = 5
         for box in boxes:
-            box[0][0] -= EXPAND
-            box[0][1] -= EXPAND
-            box[1][0] += EXPAND
+            box[0][0] -= 0
+            box[0][1] -= 0
+            box[1][0] += EXPAND + 4
             box[1][1] += EXPAND
 
         return boxes, img
 
     def recognize_texts(self, boxes, masked_img):
+        start_time_recognize = time.time()
         with concurrent.futures.ThreadPoolExecutor() as executor:
             results = [executor.submit(self.recognize_text, box, masked_img) for box in boxes]
+        end_time_recognize = time.time()
+        print(f"Thời gian nhận diện: {end_time_recognize - start_time_recognize:.2f} s")
         return [result.result() for result in results]
-
+        
     def pdf_to_images(self, pdf_path):
         pdf_document = fitz.open(pdf_path)
         images = []
@@ -80,8 +83,11 @@ class OCRProcessor:
             for box, text in zip(boxes_list[page_num], texts_list[page_num]):
                 x0, y0 = box[0]
                 x1, y1 = box[1]
-                c.setFont("Times New Roman", 11)
+                c.setFont("Times New Roman", 14)
                 c.drawString(x0, page_height - y1, text)
+                #c.setStrokeColorRGB(1, 0, 0)  # Red color for bounding boxes  #red bbox
+                #c.rect(x0, page_height - y1, x1 - x0, y1 - y0, fill=0)         #check bounding box
+
             c.showPage()
 
         c.save()
@@ -110,6 +116,6 @@ if __name__ == "__main__":
     ocr_processor = OCRProcessor()
     ocr_processor.execute(
         pdf_path='New_54.2014.QH13.pdf',
-        output_pdf_path='Multi_page_afterOCR.pdf',
-        output_docx_path='Multi_page_afterOCR.docx'
+        output_pdf_path='./Multi_page/Multi_page_afterOCR.pdf',
+        output_docx_path='./Multi_page/Multi_page_afterOCR.docx'
     )
