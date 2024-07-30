@@ -51,13 +51,13 @@ https://github.com/m1guelpf/readme-with-video/assets/94727276/2d434abb-7b71-4bca
 ## 🚀 Structure Project
 ```[bash]
 Vietnamese_OCR_Documents/
+          ├── Multi_page/               # folder containing PDF and Word after  OCR on multiple PDF pages
+          ├── PaddleOCR/                # Paddle repositories
           ├── assets/                   # contains image to OCR
           ├── config/                   #  configuration files and options for OCR system
           ├── cropped_images/           # Images are cropped for recognition purposes
           ├── folder_file_api/          # file pdf,word after OCR for web-app using Fast-api
-          ├── Multi_page/               # folder containing PDF and Word after  OCR on multiple PDF pages
           ├── weight/                   # The weight  of system
-          ├── PaddleOCR/                # Paddle repositories
           ├── static/                   # front-end 
           ├── app.py                    # demo web(local-host) using FastAPI 
           ├── Core_OCR.ipynb            # notebook paddleOCR + vietOCR
