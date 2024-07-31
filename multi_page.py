@@ -12,7 +12,10 @@ from reportlab.lib.pagesizes import letter
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfbase import pdfmetrics
 from image_processing import (convert_pdf_to_docx)
+from pdf2docx import Converter
 import time
+from docx import Document
+from docx.shared import Pt
 
 class OCRProcessor:
     def __init__(self):
@@ -92,7 +95,7 @@ class OCRProcessor:
 
         c.save()
     
-    def execute(self, pdf_path, output_pdf_path, output_docx_path):
+    def execute(self, pdf_path, output_pdf_path):
         start_time_total = time.time()
         images = self.pdf_to_images(pdf_path)
         if not images:
@@ -107,15 +110,43 @@ class OCRProcessor:
             texts_list.append(texts)
 
         self.create_blank_pdf_with_texts(images, boxes_list, texts_list, output_pdf_path)
-        convert_pdf_to_docx(output_pdf_path, output_docx_path)
+        #convert_pdf_to_docx(output_pdf_path, output_docx_path)
         
         end_time_total = time.time()
         print(f"Tổng thời gian: {end_time_total - start_time_total:.2f} s")
-        
+    
+    def pdf_to_docx(self, pdf_file, docx_file):
+        '''
+        - Converts a PDF file to a DOCX file using the `pdf2docx` library.
+        - Initializes a converter, converts the PDF file to DOCX, and closes the converter.
+        '''
+        cv = Converter(pdf_file)
+        cv.convert(docx_file, start=0, end=None)
+        cv.close()
+    def change_font_in_docx(self, docx_file, font_name='Times New Roman'):
+        '''
+        - Changes the font of all text in a DOCX file to the specified font.
+        - Uses the `python-docx` library to load the DOCX file, modify the font, and save the changes.
+        '''
+        doc = Document(docx_file)
+        style = doc.styles['Normal']
+        font = style.font
+        font.name = font_name
+        font.size = Pt(13)
+
+        for paragraph in doc.paragraphs:
+            for run in paragraph.runs:
+                run.font.name = font_name
+                run.font.size = Pt(13)
+
+        doc.save(docx_file)  
 if __name__ == "__main__":
     ocr_processor = OCRProcessor()
     ocr_processor.execute(
-        pdf_path='New_54.2014.QH13.pdf',
+        pdf_path='adminstrative_documents.pdf',
         output_pdf_path='./Multi_page/Multi_page_afterOCR.pdf',
-        output_docx_path='./Multi_page/Multi_page_afterOCR.docx'
+        #output_docx_path='./Multi_page/Multi_page_afterOCR.docx'
     )
+    ocr_processor.pdf_to_docx('./Multi_page/Multi_page_afterOCR.pdf', './Multi_page/Multi_page_afterOCR.docx')
+    ocr_processor.change_font_in_docx('./Multi_page/Multi_page_afterOCR.docx', 'Times New Roman')
+
