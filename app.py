@@ -52,8 +52,8 @@ class OCRProcessor:
         
         EXPAND = 5
         for box in boxes:
-            box[0][0] -= EXPAND
-            box[0][1] -= EXPAND
+            box[0][0] -= 0
+            box[0][1] -= 0
             box[1][0] += EXPAND
             box[1][1] += EXPAND
         
