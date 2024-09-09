@@ -143,7 +143,7 @@ class OCRProcessor:
 if __name__ == "__main__":
     ocr_processor = OCRProcessor()
     ocr_processor.execute(
-        pdf_path='adminstrative_documents.pdf',
+        pdf_path='New_54.2014.QH13.pdf',
         output_pdf_path='./Multi_page/Multi_page_afterOCR.pdf',
         #output_docx_path='./Multi_page/Multi_page_afterOCR.docx'
     )

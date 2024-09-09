@@ -86,6 +86,8 @@ In the paddle's configuration file, [DB](https://arxiv.org/pdf/1911.08947) (Diff
 
 [VietOCR](https://github.com/pbcquoc/vietocr) is a combination of CNN and  Languages Model :TransformerOCR  or AttentionOCR
 
+However, the model does only work on single text-line images with handwritten text and print text
+
 [AttentionOCR](https://arxiv.org/pdf/1706.03762)
 
 ![image](https://github.com/KaiKenju/Vietnamese_OCR_documents/assets/94727276/c1350449-14b0-4a8c-81fe-c1740e1a6880)
