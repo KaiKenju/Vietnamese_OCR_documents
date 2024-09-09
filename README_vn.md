@@ -85,6 +85,8 @@ Trong cấu hình paddle file , [DB](https://arxiv.org/pdf/1911.08947) (Differen
 
 [VietOCR](https://github.com/pbcquoc/vietocr) là sự kết hợp giữa CNN và  Languages Model : AttentionOCR và TransformerOCR
 
+Tuy nhiên, mô hình này chỉ hoạt động trên hình ảnh một dòng văn bản có chữ viết tay và chữ in
+
 [AttentionOCR](https://arxiv.org/pdf/1706.03762)
 
 ![image](https://github.com/KaiKenju/Vietnamese_OCR_documents/assets/94727276/c1350449-14b0-4a8c-81fe-c1740e1a6880)
