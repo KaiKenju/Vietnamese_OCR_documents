@@ -7,7 +7,7 @@
 
 [![][release-shield]][release-link]
 
-<img src="assets/vietnamese_ocr.png" width=900>
+<img src="assets/vietnamese_ocr.png" width=700>
 
 </div>
 
