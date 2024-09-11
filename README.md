@@ -1,4 +1,15 @@
-🌎 English | [Vietnamese](README_vn.md)
+<div align="center">
+
+<img alt="ocr_vietnamese" src="assets/logo.jpg" width=120 height=120>
+<h1>OCR Vietnamese</h1>
+
+ 🌎 English / [Vietnamese](README_vn.md) 
+
+[![][release-shield]][release-link]
+
+<img src="assets/vietnamese_ocr.png" width=900>
+
+</div>
 
 ## 🛠️ Setup
 
