@@ -5,11 +5,25 @@
 
  🌎 English / [Vietnamese](README_vn.md) 
 
-[![][release-shield]][release-link]
-
 <img src="assets/vietnamese_ocr.png" width=700>
 
 </div>
+
+<br>
+
+# Table of Contents
+- [Table of Contents](#table-of-contents)
+  - [🛠️ Setup](#️-setup)
+  - [▶️ Run](#️-run)
+  - [📝 Result](#-result)
+  - [Video Demo](#video-demo)
+  - [🚀 Structure Project](#-structure-project)
+  - [🚀 Detection: PaddleOCR](#-detection-paddleocr)
+  - [⚡ Recognition: VietOCR](#-recognition-vietocr)
+- [📧 Contact Us](#-contact-us)
+- [Contributors](#contributors)
+
+<br>
 
 ## 🛠️ Setup
 
@@ -108,3 +122,19 @@ However, the model does only work on single text-line images with handwritten te
 ![image](https://github.com/KaiKenju/Vietnamese_OCR_documents/assets/94727276/83a37c72-b84e-400c-bd7c-289dafc91149)
 
 [VietOCR](https://pbcquoc.github.io/vietocr/) library was built by me with the purpose of supporting you to use it to solve problems related to OCR in industry. The library provides both AtentionOCR and TransformerOCR architectures. Although the TransformerOCR architecture works quite well in NLP, in my opinion, the accuracy does not have a significant improvement compared to AttentionOCR and the prediction time is much slower.
+
+<br>
+
+# 📧 Contact Us
+
+If you have any questions, please email hiepdv.tb288@gmail.com
+
+<br>
+
+# Contributors
+
+<a href="https://github.com/KaiKenju/Vietnamese_OCR_documents/graphs/contributors">
+ <img src="https://avatars.githubusercontent.com/u/94727276?s=400&u=3604919bae62d678e4c12e242878f176886cd093&v=4" width="100" style="border-radius: 50%;" />
+</a>
+
+[Kai-Kenju](https://github.com/KaiKenju)

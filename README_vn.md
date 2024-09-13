@@ -1,4 +1,30 @@
-🌎 [English](README.md) | Vietnamese
+<div align="center">
+
+<img alt="ocr_vietnamese" src="assets/logo.jpg" width=120 height=120>
+<h1>OCR Vietnamese</h1>
+
+ 🌎 [English](README.md) / Vietnamese 
+
+<img src="assets/vietnamese_ocr.png" width=700>
+
+</div>
+
+<br>
+
+# Table of Contents
+- [Table of Contents](#table-of-contents)
+  - [🛠️ Cài Đặt](#️-cài-đặt)
+  - [▶️ Khởi chạy](#️-khởi-chạy)
+  - [📝 Kết quả](#-kết-quả)
+  - [Video Demo](#video-demo)
+  - [🚀 Cấu trúc của project](#-cấu-trúc-của-project)
+  - [🚀 Detection: PaddleOCR](#-detection-paddleocr)
+  - [⚡ Recognition: VietOCR](#-recognition-vietocr)
+- [📧 Contact Us](#-contact-us)
+- [Contributors](#contributors)
+
+<br>
+
 
 ## 🛠️ Cài Đặt
 
@@ -96,3 +122,19 @@ Tuy nhiên, mô hình này chỉ hoạt động trên hình ảnh một dòng v�
 ![image](https://github.com/KaiKenju/Vietnamese_OCR_documents/assets/94727276/83a37c72-b84e-400c-bd7c-289dafc91149)
 
 Thư viện [VietOCR](https://pbcquoc.github.io/vietocr/) được xây dựng với mục đích hỗ trợ các bạn sử dụng nó để giải quyết các vấn đề liên quan đến OCR trong công nghiệp. Thư viện cung cấp cả kiến ​​trúc AtentionOCR và TransformerOCR. Mặc dù kiến ​​trúc TransformerOCR hoạt động khá tốt trong NLP nhưng theo tôi độ chính xác không có sự cải thiện đáng kể so với Chú ýOCR và thời gian dự đoán chậm hơn nhiều.
+
+<br>
+
+# 📧 Contact Us
+
+Nếu bạn có câu hỏi nào, hãy liên hệ email hiepdv.tb288@gmail.com
+
+<br>
+
+# Contributors
+
+<a href="https://github.com/KaiKenju/Vietnamese_OCR_documents/graphs/contributors">
+ <img src="https://avatars.githubusercontent.com/u/94727276?s=400&u=3604919bae62d678e4c12e242878f176886cd093&v=4" width="100" style="border-radius: 50%;" />
+</a>
+
+[Kai-Kenju](https://github.com/KaiKenju)
