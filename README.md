@@ -134,7 +134,7 @@ If you have any questions, please email hiepdv.tb288@gmail.com
 # Contributors
 
 <a href="https://github.com/KaiKenju/Vietnamese_OCR_documents/graphs/contributors">
- <img src="https://avatars.githubusercontent.com/u/94727276?s=400&u=3604919bae62d678e4c12e242878f176886cd093&v=4" width="100" style="border-radius: 50%;" />
+ <img src="https://github.com/KaiKenju/Vietnamese_OCR_documents/assets/avt-removebg-preview.png" width="100" />
 </a>
 
 [Kai-Kenju](https://github.com/KaiKenju)
