@@ -11,6 +11,14 @@
 
 <br>
 
+> **Related Projects**：
+>
+> - [Recognition-table-with-table-transformer](https://github.com/KaiKenju/Recognition-Table-with-Table_Transformer-and-vietOCR): Sự kết hợp giữa Table Transformer và vietOCR tạo ra một hệ thống nhận dạng bảng mạnh mẽ, trích xuất cấu trúc bảng từ hình ảnh và đồng thời nhận dạng các ký tự tiếng Việt. Table Transformer xử lý bố cục và cấu trúc bảng, trong khi vietOCR tập trung vào nhận dạng ký tự chính xác, cung cấp độ chính xác cao trong việc trích xuất dữ liệu bảng từ các tài liệu tiếng Việt.
+
+<br>
+
+<br>
+
 # Table of Contents
 - [Table of Contents](#table-of-contents)
   - [🛠️ Cài Đặt](#️-cài-đặt)
