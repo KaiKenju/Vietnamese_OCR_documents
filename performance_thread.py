@@ -1,3 +1,5 @@
+import gridfs
+from pymongo import MongoClient
 from paddleocr import PaddleOCR, draw_ocr
 from vietocr.tool.predictor import Predictor
 from vietocr.tool.config import Cfg
@@ -21,14 +23,15 @@ class OCRProcessor:
     def __init__(self):
         self.ocr = self.initialize_ocr()
         self.detector = self.initialize_vietocr()
+        self.client = MongoClient('mongodb://localhost:27017/')  # Kết nối tới MongoDB
+        self.db = self.client['OCRdata']  # Thay thế với tên cơ sở dữ liệu của bạn
+        self.fs = gridfs.GridFS(self.db)
 
     def initialize_ocr(self):
         ocr = PaddleOCR(lang='en', use_gpu=False)
         return ocr
 
     def initialize_vietocr(self):
-        # config = Cfg.load_config_from_name('vgg_transformer')
-        # config['weights'] = './weight/vgg_transformer.pth'
         config = Cfg.load_config_from_file('./config/config_after_trainer.yml')
         config['weights'] = './weight/transformerocr.pth'
         config['cnn']['pretrained'] = False
@@ -46,7 +49,7 @@ class OCRProcessor:
     def process_image(self, img_path):
         start_time_total = time.time()
         img = cv2.imread(img_path)
-        
+
         # Tăng cường độ sáng nếu cần
         img = enhance_brightness(img, 240)
         img = preprocess_image(img)
@@ -69,7 +72,7 @@ class OCRProcessor:
             box[1][1] += EXPAND
 
         masked_img, edges_on_white = detect_table_edges(img)
-        
+
         return boxes, masked_img, img
 
     def recognize_texts(self, boxes, masked_img):
@@ -96,11 +99,19 @@ class OCRProcessor:
 
     def convert_pdf_to_docx1(self, pdf_file, docx_file):
         convert_pdf_to_docx(pdf_file, docx_file)
-    
 
+    def save_image_to_mongodb(self, img_path):
+        with open(img_path, 'rb') as img_file:
+            img_id = self.fs.put(img_file, filename=os.path.basename(img_path))  # Lưu ảnh và lấy ID
+            print(f"Image saved with ID: {img_id}")
+            
+    
     def execute(self, img_path, pdf_path, docx_path):
         start_time_total = time.time()
         boxes, masked_img, img = self.process_image(img_path)
+
+        # Lưu hình ảnh vào MongoDB
+        self.save_image_to_mongodb(img_path)
 
         start_time_recognition = time.time()
         texts = self.recognize_texts(boxes, masked_img)
@@ -108,18 +119,23 @@ class OCRProcessor:
 
         self.create_pdf(texts, boxes, img.shape, pdf_path)
         self.convert_pdf_to_docx1(pdf_path, docx_path)
-        
+        self.save_file_to_mongodb(docx_path)
+        self.save_file_to_mongodb(pdf_path)
+
         end_time_total = time.time()
 
         print(f"Thời gian phát hiện của PaddleOCR: {self.execution_time_detection:.2f} s")
         print(f"Thời gian nhận diện: {end_time_recognition - start_time_recognition:.2f} s")
         print(f"Tổng thời gian: {end_time_total - start_time_total:.2f} s")
 
+    def save_file_to_mongodb(self,pdf_path):
+        with open(pdf_path, 'rb') as file:
+            file_id = self.fs.put(file, filename=pdf_path.split('/')[-1])  # Lưu tệp và lấy ID
+            print(f"File saved with ID: {file_id}")
 if __name__ == "__main__":
     ocr_processor = OCRProcessor()
     ocr_processor.execute(
-        img_path='./assets/image_image(536).jpg',
+        img_path='./assets/test_ne.png',
         pdf_path='ocr_final.pdf',
         docx_path='ocr_final_word.docx'
     )
-
